@@ -10,4 +10,17 @@ export const store = defineStore("defineStore", {
       },
     ],
   }),
+  actions: {
+    addTodo(id, title, isCompleted) {
+      if (title === "") {
+        return;
+      } else {
+        this.todos.push({
+          id: id,
+          title: title,
+          isCompleted: isCompleted,
+        });
+      }
+    },
+  },
 });

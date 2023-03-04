@@ -1,7 +1,6 @@
 <script setup>
 import { ref } from "vue";
 import { store } from "@/stores/store";
-import { looseIndexOf } from "@vue/shared";
 
 const defineStore = store();
 
@@ -25,10 +24,7 @@ const filterByComplete = () => {
 };
 
 const removeItem = (id) => {
-  defineStore.todos.splice(
-    defineStore.todos.findIndex((t) => t.id === id),
-    1
-  );
+  defineStore.todos.splice(id, 1);
 };
 </script>
 
@@ -36,9 +32,9 @@ const removeItem = (id) => {
   <div
     class="max-w-[540px] w-full mx-auto -translate-y-10 rounded-xl overflow-hidden"
   >
-    <ul>
+    <ul v-auto-animate>
       <li
-        v-for="(todo, id) in fc"
+        v-for="(todo, id) in defineStore.todos"
         :key="todo.id"
         class="flex items-center justify-between p-4 bg-div gap-5 text-todo tracking-wide text-base"
         :class="todo.isCompleted ? 'line-through text-[#4D5067]' : ''"
@@ -84,6 +80,7 @@ const removeItem = (id) => {
         left</span
       >
       <ul
+        v-auto-animate
         class="flex items-center gap-8 sm:order-none order-1 mx-auto border border-slate-700 p-3 rounded-lg"
       >
         <li
@@ -110,7 +107,9 @@ const removeItem = (id) => {
       </ul>
       <button
         class="hover:text-[#E3E4F1]"
-        @click="fc = defineStore.todos.filter((c) => !c.isCompleted)"
+        @click="
+          defineStore.todos = defineStore.todos.filter((c) => !c.isCompleted)
+        "
       >
         Clear Completed
       </button>

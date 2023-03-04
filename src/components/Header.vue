@@ -1,22 +1,11 @@
 <script setup>
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import { store } from "@/stores/store";
 
 const defineStore = store();
 
 const term = ref(""),
   isComplete = ref(false);
-
-const addTodo = () => {
-  defineStore.todos.push({
-    id: Date.now(),
-    title: term.value,
-    isCompleted: isComplete.value,
-  });
-
-  term.value = "";
-  isComplete.value = false;
-};
 </script>
 
 <template>
@@ -32,7 +21,11 @@ const addTodo = () => {
 
       <div>
         <form
-          @submit.prevent="addTodo"
+          @submit.prevent="
+            defineStore.addTodo(Date.now(), term, isComplete),
+              (term = ''),
+              (isComplete = false)
+          "
           class="relative flex items-center rounded w-full p-7 bg-div"
         >
           <div
