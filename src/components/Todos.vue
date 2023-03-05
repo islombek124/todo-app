@@ -4,9 +4,8 @@ import { store } from "@/stores/store";
 
 const defineStore = store();
 
-const filter = ref("all");
-
 const fc = ref(defineStore.todos);
+const filter = ref("all");
 
 const filterByAll = () => {
   filter.value = "all";
@@ -30,11 +29,13 @@ const removeItem = (id) => {
 
 <template>
   <div
+    v-if="defineStore.todos.length !== 0"
+    v-auto-animate
     class="max-w-[540px] w-full mx-auto -translate-y-10 rounded-xl overflow-hidden"
   >
     <ul v-auto-animate>
       <li
-        v-for="(todo, id) in defineStore.todos"
+        v-for="(todo, id) in fc"
         :key="todo.id"
         class="flex items-center justify-between p-4 bg-div gap-5 text-todo tracking-wide text-base"
         :class="todo.isCompleted ? 'line-through text-[#4D5067]' : ''"
@@ -72,7 +73,6 @@ const removeItem = (id) => {
       </li>
     </ul>
     <div
-      v-if="defineStore.todos.length !== 0"
       class="flex items-center flex-wrap w-full gap-4 justify-between bg-div p-4"
     >
       <span
@@ -85,21 +85,21 @@ const removeItem = (id) => {
       >
         <li
           class="font-bold"
-          :class="{ active: filter === 'all' }"
+          :class="[filter === 'all' ? 'active' : '']"
           @click="filterByAll"
         >
           All
         </li>
         <li
           class="font-bold"
-          :class="{ active: filter === 'active' }"
+          :class="[filter === 'active' ? 'active' : '']"
           @click="filterByActive"
         >
           Active
         </li>
         <li
           class="font-bold"
-          :class="{ active: filter === 'completed' }"
+          :class="[filter === 'completed' ? 'active' : '']"
           @click="filterByComplete"
         >
           Completed
@@ -107,9 +107,7 @@ const removeItem = (id) => {
       </ul>
       <button
         class="hover:text-[#E3E4F1]"
-        @click="
-          defineStore.todos = defineStore.todos.filter((c) => !c.isCompleted)
-        "
+        @click="fc = defineStore.todos.filter((c) => !c.isCompleted)"
       >
         Clear Completed
       </button>
